@@ -278,4 +278,112 @@ pub mod tuple {
         assert_eq!(v4.z, 1.0);
         assert_eq!(v4.w, 0.0);
     }
+
+    #[derive(Debug, PartialEq, Copy, Clone)]
+    pub struct Color {
+        pub red: f64,
+        pub green: f64,
+        pub blue: f64,
+    }
+
+    impl Color {
+        pub fn new(red: f64, green: f64, blue: f64) -> Color {
+            Color { red, green, blue }
+        }
+
+        pub fn add(&self, other: &Color) -> Color {
+            Color::new(self.red + other.red, self.green + other.green, self.blue + other.blue)
+        }
+
+        pub fn sub(&self, other: &Color) -> Color {
+            Color::new(self.red - other.red, self.green - other.green, self.blue - other.blue)
+        }
+
+        pub fn multiply(&self, other: &Color) -> Color {
+            Color::new(self.red * other.red, self.green * other.green, self.blue * other.blue)
+        }
+
+        pub fn multiply_scalar(&self, scalar: f64) -> Color {
+            Color::new(self.red * scalar, self.green * scalar, self.blue * scalar)
+        }
+    }
+
+    impl ops::Sub for Color {
+        type Output = Color;
+
+        fn sub(self, other: Color) -> Color {
+            Color::new(self.red - other.red, self.green - other.green, self.blue - other.blue)
+        }
+    }
+
+    impl ops::Add<Self> for Color {
+        type Output = Self;
+
+        fn add(self, other: Self) -> Self {
+            Color::new(self.red + other.red, self.green + other.green, self.blue + other.blue)
+        }
+    }
+
+    impl ops::Mul<Self> for Color {
+        type Output = Self;
+
+        fn mul(self, other: Self) -> Self {
+            Color::new(self.red * self.red, self.green * other.green, self.blue * other.blue)
+        }
+    }
+
+    impl ops::Mul<f64> for Color {
+        type Output = Color;
+
+        fn mul(self, other: f64) -> Color {
+            Color::new(self.red * other, self.green * other, self.blue * other)
+        }
+    }
+
+    #[test]
+    fn can_create_color() {
+        let c = Color::new(-0.5, 0.4, 1.7);
+        assert_eq!(c.red, -0.5);
+        assert_eq!(c.green, 0.4);
+        assert_eq!(c.blue, 1.7);
+    }
+
+    #[test]
+    fn can_add_colors() {
+        let c1 = Color::new(0.9, 0.6, 0.75);
+        let c2 = Color::new(0.7, 0.1, 0.25);
+        let c3 = c1.add(&c2);
+        assert_eq!(c3.red, 1.6);
+        assert_eq!(c3.green, 0.7);
+        assert_eq!(c3.blue, 1.0);
+    }
+
+    #[test]
+    fn can_subtract_colors() {
+        let c1 = Color::new(0.9, 0.6, 0.75);
+        let c2 = Color::new(0.7, 0.1, 0.25);
+        let c3 = c1.sub(&c2);
+        assert_eq!(c3.red, 0.20000000000000007);
+        assert_eq!(c3.green, 0.5);
+        assert_eq!(c3.blue, 0.5);
+    }
+
+    #[test]
+    fn can_multiply_colors() {
+        let c1 = Color::new(1.0, 0.2, 0.4);
+        let c2 = Color::new(0.9, 1.0, 0.1);
+        let c3 = c1.multiply(&c2);
+        assert_eq!(c3.red, 0.9);
+        assert_eq!(c3.green, 0.2);
+        assert_eq!(c3.blue, 0.04000000000000001);
+    }
+
+    #[test]
+    fn can_multiply_color_by_scalar() {
+        let c1 = Color::new(0.2, 0.3, 0.4);
+        let c2 = c1.multiply_scalar(2.0);
+        assert_eq!(c2.red, 0.4);
+        assert_eq!(c2.green, 0.6);
+        assert_eq!(c2.blue, 0.8);
+    }
 }
