@@ -2,14 +2,14 @@ pub mod canvas {
     use crate::tuple::tuple::Color;
     use insta::assert_debug_snapshot;
 
-    struct Canvas {
-        width: usize,
-        height: usize,
+    pub struct Canvas {
+        pub(crate) width: usize,
+        pub(crate) height: usize,
         pixels: Vec<Color>,
     }
 
     impl Canvas {
-        fn new(width: usize, height: usize) -> Canvas {
+        pub fn new(width: usize, height: usize) -> Canvas {
             Canvas {
                 width,
                 height,
@@ -17,22 +17,22 @@ pub mod canvas {
             }
         }
 
-        fn write_pixel(&mut self, x: usize, y: usize, color: Color) {
+        pub fn write_pixel(&mut self, x: usize, y: usize, color: Color) {
             self.pixels[y * self.width + x] = color;
         }
 
-        fn pixel_at(&self, x: usize, y: usize) -> Color {
+        pub fn pixel_at(&self, x: usize, y: usize) -> Color {
             self.pixels[y * self.width + x]
         }
 
         fn tuple_to_color(&self, color: Color) -> (u8, u8, u8) {
-            let r = (color.red.min(1.0).max(0.0) * 255.0) as u8;
-            let g = (color.green.min(1.0).max(0.0) * 255.0) as u8;
-            let b = (color.blue.min(1.0).max(0.0) * 255.0) as u8;
+            let r = (color.red.min(1.0).max(0.0) * 255.0).round() as u8;
+            let g = (color.green.min(1.0).max(0.0) * 255.0).round() as u8;
+            let b = (color.blue.min(1.0).max(0.0) * 255.0).round() as u8;
             (r, g, b)
         }
 
-        fn to_ppm(&self) -> String {
+        pub fn to_ppm(&self) -> String {
             let mut ppm = String::new();
             ppm.push_str(&format!("P3 {} {} 255", self.width, self.height));
             for y in 0..self.height {

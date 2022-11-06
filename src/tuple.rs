@@ -83,7 +83,7 @@ pub mod tuple {
             f64::sqrt(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w)
         }
 
-        fn normalize(&self) -> Tuple {
+        pub(crate) fn normalize(&self) -> Tuple {
             let m = self.magnitude();
             Tuple::new(self.x / m, self.y / m, self.z / m, self.w / m)
         }
