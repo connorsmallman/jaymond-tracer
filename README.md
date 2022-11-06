@@ -1,2 +1,2 @@
 # jaymond-tracer
-John and Raymond Ray Tracer 
+Ray Tracer 
